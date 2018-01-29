@@ -7,10 +7,12 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
+import preprocessing.MatrixUtils;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class ClassifierTest {
 
@@ -25,6 +27,17 @@ public class ClassifierTest {
 //        RealVector g = mcc.predict(X);
 //
 //        System.out.println(g);
+
+        RealMatrix matrix = new Array2DRowRealMatrix(new double[][] {
+                {1.0, 1.0},
+                {2.0, 2.0},
+                {3.0, 3.0},
+                {4.0, 4.0},
+                {5.0, 5.0},
+                {6.0, 6.0},
+        });
+
+        System.out.println(MatrixUtils.shuffle(matrix, 5));
     }
 
     /**
