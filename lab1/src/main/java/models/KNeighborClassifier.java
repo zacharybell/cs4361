@@ -5,8 +5,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 public class KNeighborClassifier extends AbstractClassifier {
@@ -34,26 +33,38 @@ public class KNeighborClassifier extends AbstractClassifier {
     @Override
     protected RealVector predict(RealMatrix X) {
 
-        double[] rowTest, rowTrain;
-        double min = Double.MAX_VALUE, temp;
-        Double prediction = null;
-        List<Double> predictionsList = new LinkedList<>();
+        if (!super.trained) throw new IllegalStateException("You must train the model with the fit method first!");
+
+        double[] rowTest, rowTrain, predictions = new double[k];
+        double temp1;
+        Integer prediction;
+        List<Integer> predictionsList = new LinkedList<>();
+
+        Queue<Map.Entry<Integer, Double>> ranking = new PriorityQueue<>((o1, o2) -> {
+            double difference = (o2.getValue() - o1.getValue());
+            if (difference > 0) return 1;
+            else if (difference < 0) return -1;
+            return 0;
+        });
 
         for (int i = 0; i < X.getRowDimension(); i++) {
             rowTest = X.getRow(i);
             for (int j = 0; j < XTrain.getRowDimension(); j++) {
                 rowTrain = XTrain.getRow(j);
-                temp = weightFunction.apply(new Array2DRowRealMatrix(new double[][] {rowTest, rowTrain}));
-                if (temp < min) {
-                    prediction = yTrain.getEntry(j);
-                    min = temp;
-                }
+                temp1 = weightFunction.apply(new Array2DRowRealMatrix(new double[][] {rowTest, rowTrain}));
+                ranking.add(new AbstractMap.SimpleEntry<>(j, temp1));
             }
+
+            for (int j = 0; j < k; j++) {
+                predictions[j] = yTrain.getEntry(ranking.poll().getKey());
+            }
+            prediction = mostCommon(new ArrayRealVector(predictions));
+
             predictionsList.add(prediction);
         }
 
-        Double[] predictions = new Double[predictionsList.size()];
-        predictionsList.toArray(predictions);
+        Integer[] temp2 = new Integer[predictionsList.size()];
+        predictionsList.toArray(temp2);
 
         return new ArrayRealVector(predictions);
     }
