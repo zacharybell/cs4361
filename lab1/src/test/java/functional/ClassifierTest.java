@@ -28,16 +28,16 @@ public class ClassifierTest {
 //
 //        System.out.println(g);
 
-        RealMatrix matrix = new Array2DRowRealMatrix(new double[][] {
-                {1.0, 1.0},
-                {2.0, 2.0},
-                {3.0, 3.0},
-                {4.0, 4.0},
-                {5.0, 5.0},
-                {6.0, 6.0},
-        });
-
-        System.out.println(MatrixUtils.shuffle(matrix, 5));
+//        RealMatrix matrix = new Array2DRowRealMatrix(new double[][] {
+//                {1.0, 1.0},
+//                {2.0, 2.0},
+//                {3.0, 3.0},
+//                {4.0, 4.0},
+//                {5.0, 5.0},
+//                {6.0, 6.0},
+//        });
+//
+//        System.out.println(MatrixUtils.shuffle(matrix, 5));
     }
 
     /**
