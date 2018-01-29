@@ -8,6 +8,10 @@ import org.apache.commons.math3.linear.RealVector;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Uses the KNeighbors algorithm to predict a matrix of X instances by finding training instance(s) that most closely
+ * match X.
+ */
 public class KNeighborClassifier extends AbstractClassifier {
 
     private Function<RealMatrix, Double> weightFunction;
@@ -15,13 +19,18 @@ public class KNeighborClassifier extends AbstractClassifier {
     private RealMatrix XTrain;
     private RealVector yTrain;
 
+    /**
+     * K is the number of training instances that will have an input in determining X's predicted class.
+     *
+     * @param k the number of neighbors polled
+     * @param weightFunction a function determining the significance of a neighbor
+     */
     public KNeighborClassifier(int k, Function<RealMatrix, Double> weightFunction) {
         super();
 
         this.k = k;
         this.weightFunction = weightFunction;
     }
-
 
     @Override
     public void fit(RealMatrix X, RealVector y) {

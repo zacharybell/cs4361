@@ -8,11 +8,28 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Abstract classifier for machine learning classification problems. Any classifier has a @link{#fit} method that takes a
+ * training and test set and generalizes future predictions made with the @{#predict} method.
+ */
 public abstract class AbstractClassifier {
 
     protected boolean trained = false;
 
+    /**
+     * Takes training data and fits a model that can be used for future predictions of new data.
+     *
+     * @param X the features
+     * @param y the labels for the features
+     */
     protected abstract void fit(@NotNull RealMatrix X, @NotNull RealVector y);
+
+    /**
+     * Predicts a proper label for an input of a feature set.
+     *
+     * @param X the features
+     * @return a vector of predictions
+     */
     protected abstract RealVector predict(@NotNull RealMatrix X);
 
     /**

@@ -4,6 +4,11 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
+/**
+ * Gives predictions on the class of a provided set by training with a test set and classifying based on the most common
+ * class witnessed in the training set. If class A was the most prevalent when trained, this classifier will predict that
+ * class for every prediction given.
+ */
 public class MostCommonClassifier extends AbstractClassifier {
 
     private Integer mostCommon = null;

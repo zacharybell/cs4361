@@ -4,6 +4,11 @@ import org.apache.commons.math3.linear.RealMatrix;
 
 import java.util.function.Function;
 
+/**
+ * Lambda equation that takes a real matrix and applies gravitational weights to determine distance between the two
+ * row vectors within the matrix. Vectors that are very similar will have a higher weight. The equation used utilizes
+ * a 1/r^2 method to compute.
+ */
 public class GravitationalWeights implements Function<RealMatrix, Double> {
     @Override
     public Double apply(RealMatrix realMatrix) {
@@ -18,7 +23,6 @@ public class GravitationalWeights implements Function<RealMatrix, Double> {
         double weightedDistance = 0;
         for (int i = 0; i < rowA.length; i++) {
             weightedDistance += (1 / Math.pow(rowA[i] - rowB[i] + 0.000001, 2));
-//            weightedDistance += 1 / Math.abs(rowA[i] - rowB[i]);
         }
 
         return weightedDistance;

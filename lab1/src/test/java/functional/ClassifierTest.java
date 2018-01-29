@@ -59,9 +59,6 @@ public class ClassifierTest {
         System.out.println("Actual " + yTest);
         System.out.println("MCC    " + yPredictMCC);
         System.out.println("KNN    " + yPredictKNN);
-
-
-
     }
 
     /**
