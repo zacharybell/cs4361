@@ -7,37 +7,42 @@ import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.jetbrains.annotations.NotNull;
-import preprocessing.MatrixUtils;
+import utils.MatrixUtils;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 public class ClassifierTest {
 
     public static void main(String[] args) {
 
-//        RealMatrix data = new Array2DRowRealMatrix(readCSV("lab1/src/test/resources/iris_numlabel.txt"));
-//        RealMatrix X = data.getSubMatrix(0, data.getRowDimension() - 1, 0, data.getColumnDimension() - 2);
-//        RealVector y = data.getColumnVector(data.getColumnDimension() - 1);
-//
-//        MostCommonClassifier mcc = new MostCommonClassifier();
-//        mcc.fit(X, y);
-//        RealVector g = mcc.predict(X);
-//
-//        System.out.println(g);
+        double splitRatio = 0.7;
 
-//        RealMatrix matrix = new Array2DRowRealMatrix(new double[][] {
-//                {1.0, 1.0},
-//                {2.0, 2.0},
-//                {3.0, 3.0},
-//                {4.0, 4.0},
-//                {5.0, 5.0},
-//                {6.0, 6.0},
-//        });
-//
-//        System.out.println(MatrixUtils.shuffle(matrix, 5));
+        RealMatrix data = new Array2DRowRealMatrix(readCSV("lab1/src/test/resources/iris_numlabel.txt"));
+
+        data = MatrixUtils.shuffle(data, 99);
+
+        // split
+        RealMatrix X = data.getSubMatrix(0, data.getRowDimension() - 1, 0, data.getColumnDimension() - 2);
+        RealVector y = data.getColumnVector(data.getColumnDimension() - 1);
+
+        X = MatrixUtils.normalize(X);
+
+        // split
+        RealMatrix XTrain = X.getSubMatrix(0, (int)(X.getRowDimension() * splitRatio) - 1, 0, X.getColumnDimension() - 1);
+        RealVector yTrain = y.getSubVector(0, (int)(y.getDimension() * splitRatio));
+        RealMatrix XTest = X.getSubMatrix((int)(X.getRowDimension() * splitRatio), X.getRowDimension() - 1, 0, X.getColumnDimension() - 1);
+        RealVector yTest = y.getSubVector((int)(y.getDimension() * splitRatio), y.getDimension() - yTrain.getDimension());
+
+
+        // Most common classifier
+        MostCommonClassifier mcc = new MostCommonClassifier();
+        mcc.fit(XTrain, yTrain);
+        RealVector yPredict = mcc.predict(XTest);
+
+
+
     }
 
     /**
