@@ -20,6 +20,7 @@ public class ClassifierTest {
     public static void main(String[] args) {
 
         double splitRatio = 0.75;
+        int k = 14;
 
         RealMatrix data = new Array2DRowRealMatrix(readCSV("lab1/src/test/resources/iris_numlabel.txt"));
 
@@ -41,22 +42,22 @@ public class ClassifierTest {
         // Most common classifier
         MostCommonClassifier mcc = new MostCommonClassifier();
         mcc.fit(XTrain, yTrain);
-        RealVector yPredictMCC = mcc.predict(XTest);
+        RealVector yPredictMCC = mcc.predict(XTrain);
 
         System.out.println("Most common classifier");
-        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictMCC, yTest));
+        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictMCC, yTrain));
         System.out.println("------------------------------------------");
 
         // Most common classifier
-        KNeighborClassifier knn = new KNeighborClassifier( 14, new GravitationalWeights());
+        KNeighborClassifier knn = new KNeighborClassifier(k, new GravitationalWeights());
         knn.fit(XTrain, yTrain);
-        RealVector yPredictKNN = knn.predict(XTest);
+        RealVector yPredictKNN = knn.predict(XTrain);
 
         System.out.println("KNeighbors classifier");
-        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictKNN, yTest));
+        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictKNN, yTrain));
         System.out.println("------------------------------------------");
 
-        System.out.println("Actual " + yTest);
+        System.out.println("Actual " + yTrain);
         System.out.println("MCC    " + yPredictMCC);
         System.out.println("KNN    " + yPredictKNN);
     }

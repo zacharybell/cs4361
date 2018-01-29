@@ -69,6 +69,7 @@ public class KNeighborClassifier extends AbstractClassifier {
                 predictions[j] = yTrain.getEntry(ranking.poll().getKey());
             }
             prediction = mostCommon(new ArrayRealVector(predictions));
+            ranking.clear();
 
             predictionsList.add(prediction.doubleValue());
         }
