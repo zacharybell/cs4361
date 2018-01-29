@@ -1,5 +1,7 @@
 package functional;
 
+import functions.GravitationalWeights;
+import models.KNeighborClassifier;
 import models.MostCommonClassifier;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -17,7 +19,7 @@ public class ClassifierTest {
 
     public static void main(String[] args) {
 
-        double splitRatio = 0.7;
+        double splitRatio = 0.75;
 
         RealMatrix data = new Array2DRowRealMatrix(readCSV("lab1/src/test/resources/iris_numlabel.txt"));
 
@@ -39,7 +41,24 @@ public class ClassifierTest {
         // Most common classifier
         MostCommonClassifier mcc = new MostCommonClassifier();
         mcc.fit(XTrain, yTrain);
-        RealVector yPredict = mcc.predict(XTest);
+        RealVector yPredictMCC = mcc.predict(XTest);
+
+        System.out.println("Most common classifier");
+        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictMCC, yTest));
+        System.out.println("------------------------------------------");
+
+        // Most common classifier
+        KNeighborClassifier knn = new KNeighborClassifier( 14, new GravitationalWeights());
+        knn.fit(XTrain, yTrain);
+        RealVector yPredictKNN = knn.predict(XTest);
+
+        System.out.println("KNeighbors classifier");
+        System.out.println("Accuracy: " + MatrixUtils.accuracy(yPredictKNN, yTest));
+        System.out.println("------------------------------------------");
+
+        System.out.println("Actual " + yTest);
+        System.out.println("MCC    " + yPredictMCC);
+        System.out.println("KNN    " + yPredictKNN);
 
 
 

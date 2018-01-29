@@ -15,7 +15,7 @@ public class KNeighborClassifier extends AbstractClassifier {
     private RealMatrix XTrain;
     private RealVector yTrain;
 
-    KNeighborClassifier(int k, Function<RealMatrix, Double> weightFunction) {
+    public KNeighborClassifier(int k, Function<RealMatrix, Double> weightFunction) {
         super();
 
         this.k = k;
@@ -24,21 +24,21 @@ public class KNeighborClassifier extends AbstractClassifier {
 
 
     @Override
-    protected void fit(RealMatrix X, RealVector y) {
+    public void fit(RealMatrix X, RealVector y) {
         this.XTrain = X.copy();
         this.yTrain = y.copy();
         super.trained = true;
     }
 
     @Override
-    protected RealVector predict(RealMatrix X) {
+    public RealVector predict(RealMatrix X) {
 
         if (!super.trained) throw new IllegalStateException("You must train the model with the fit method first!");
 
-        double[] rowTest, rowTrain, predictions = new double[k];
+        double[] rowTest, rowTrain, predictions;
         double temp1;
         Integer prediction;
-        List<Integer> predictionsList = new LinkedList<>();
+        List<Double> predictionsList = new LinkedList<>();
 
         Queue<Map.Entry<Integer, Double>> ranking = new PriorityQueue<>((o1, o2) -> {
             double difference = (o2.getValue() - o1.getValue());
@@ -55,17 +55,18 @@ public class KNeighborClassifier extends AbstractClassifier {
                 ranking.add(new AbstractMap.SimpleEntry<>(j, temp1));
             }
 
+            predictions = new double[k];
             for (int j = 0; j < k; j++) {
                 predictions[j] = yTrain.getEntry(ranking.poll().getKey());
             }
             prediction = mostCommon(new ArrayRealVector(predictions));
 
-            predictionsList.add(prediction);
+            predictionsList.add(prediction.doubleValue());
         }
 
-        Integer[] temp2 = new Integer[predictionsList.size()];
+        Double[] temp2 = new Double[predictionsList.size()];
         predictionsList.toArray(temp2);
 
-        return new ArrayRealVector(predictions);
+        return new ArrayRealVector(temp2);
     }
 }

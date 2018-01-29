@@ -17,7 +17,8 @@ public class GravitationalWeights implements Function<RealMatrix, Double> {
 
         double weightedDistance = 0;
         for (int i = 0; i < rowA.length; i++) {
-            weightedDistance += (1 / Math.pow(rowA[i] - rowB[i], 2));
+            weightedDistance += (1 / Math.pow(rowA[i] - rowB[i] + 0.000001, 2));
+//            weightedDistance += 1 / Math.abs(rowA[i] - rowB[i]);
         }
 
         return weightedDistance;
