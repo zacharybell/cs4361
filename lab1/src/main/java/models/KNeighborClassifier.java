@@ -34,6 +34,9 @@ public class KNeighborClassifier extends AbstractClassifier {
 
     @Override
     public void fit(RealMatrix X, RealVector y) {
+
+        if (X.getColumnDimension() < this.k) throw new IllegalArgumentException("The number of samples must be greater than or equal to k!");
+
         this.XTrain = X.copy();
         this.yTrain = y.copy();
         super.trained = true;
