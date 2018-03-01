@@ -1,1 +1,6 @@
 .*
+*.png
+*.svg
+*.pdf
+*.tex
+lfw_home/
