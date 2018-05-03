@@ -6,3 +6,5 @@
 *.txt
 lfw_home/
 lfw_data/
+
+__pycache__/
