@@ -4,7 +4,8 @@
 *.pdf
 *.tex
 *.txt
+scratch.py
+
 lfw_home/
 lfw_data/
-
 __pycache__/
