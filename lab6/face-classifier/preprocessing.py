@@ -20,7 +20,7 @@ def load_lfw_data(path=TARGET_PATH, mfpp=0, mirror=False):
             accept.
         mirror (bool): If true, will create mirrored images for every training
             instance. Note that this will double the dataset.
-            
+
     Returns:
         lfw_images (ndarray): A 2d array with rows as the instances and columns
             as the flattened pixels of each image.
@@ -34,22 +34,16 @@ def load_lfw_data(path=TARGET_PATH, mfpp=0, mirror=False):
     lfw_labels                 = pd.DataFrame()
     lfw_labels['target_names'] = pd.Series(target_names)
     lfw_labels['target_id']    = pd.Series(lfw_bunch['target'])
-    lfw_images                 = lfw_bunch['data'] / 255
+    lfw_images                 = lfw_bunch['images'] / 255
+    lfw_images                 = lfw_images.reshape((-1, lfw_images.shape[1],
+                                                         lfw_images.shape[2],1))
 
     if mirror:
-        dim = lfw_bunch['images'].shape
-
-        reverse_lfw_images = reverse_images(lfw_images, dim)
+        reverse_lfw_images = np.flip(lfw_images, axis=2)
         lfw_images = np.append(lfw_images, reverse_lfw_images, axis=0)
         lfw_labels = lfw_labels.append(lfw_labels)
 
     return lfw_images, lfw_labels
-
-def reverse_images(images: np.ndarray, dim: tuple) -> np.ndarray:
-    images = images.reshape((-1, dim[0], dim[1]))
-    images = np.flip(images, axis=2).reshape((-1,dim[0] * dim[1]))
-    return images
-
 
 ## reverse_images testing
 # i1 = np.array([[1, 2, 3], [4, 5, 6]])
