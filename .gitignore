@@ -3,4 +3,6 @@
 *.svg
 *.pdf
 *.tex
+*.txt
 lfw_home/
+lfw_data/
