@@ -11,7 +11,23 @@ def convert_id_to_name(idx, names_idx):
         names[i] = names[idx[i]]
     return names
 
-def load_lfw_data(path=TARGET_PATH, mfpp=0):
+def load_lfw_data(path=TARGET_PATH, mfpp=0, mirror=False):
+    """ Load the Labeled Faces in the Wild Datasetself.
+
+    Args:
+        path (str): The path to the directory of the cache.
+        pfpp (int): The minimum training instances (of a particular label) to
+            accept.
+        mirror (bool): If true, will create mirrored images for every training
+            instance. Note that this will double the dataset.
+            
+    Returns:
+        lfw_images (ndarray): A 2d array with rows as the instances and columns
+            as the flattened pixels of each image.
+        lfw_labels (DataFrame): A DataFrame containing the target_id (the label)
+            and the target_name (the persons name).
+    """
+
     lfw_bunch                  = fetch_lfw_people(data_home=TARGET_PATH,
                                                   min_faces_per_person=mfpp)
     target_names               = convert_id_to_name(lfw_bunch['target'], lfw_bunch['target_names'])
@@ -20,9 +36,14 @@ def load_lfw_data(path=TARGET_PATH, mfpp=0):
     lfw_labels['target_id']    = pd.Series(lfw_bunch['target'])
     lfw_images                 = lfw_bunch['data'] / 255
 
-    dim = lfw_bunch['images'].shape
+    if mirror:
+        dim = lfw_bunch['images'].shape
 
-    return lfw_images, lfw_labels, dim
+        reverse_lfw_images = reverse_images(lfw_images, dim)
+        lfw_images = np.append(lfw_images, reverse_lfw_images, axis=0)
+        lfw_labels = lfw_labels.append(lfw_labels)
+
+    return lfw_images, lfw_labels
 
 def reverse_images(images: np.ndarray, dim: tuple) -> np.ndarray:
     images = images.reshape((-1, dim[0], dim[1]))
